@@ -1,0 +1,3 @@
+aleatórios/arqDezMil.txt
+crescente/arqDezMil.txt
+decrescente/arqDezMil.txt

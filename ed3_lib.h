@@ -14,7 +14,9 @@
 #include<iostream>
 #include<stdlib.h>
 #include<algorithm>
+#include<fstream>
 #include<string>
+#include<functional>
 #include<chrono>
 #include<stdint.h>
 #include<random>
@@ -37,9 +39,12 @@ int64 gettimestamp();
 int32 random_int32(int32 min_val, int32 max_val);
 //Preenxe um vector com a quantidade especificada de itens...
 void fill_vector(std::vector<int32>& vect, uint32 size, int32 min_val=0, int32 max_val=100);
+//Ler uma lista de números de um arquivo e preenxer o vetor...
+bool fill_vector_from_file(const std::string& filename, std::vector<int32>& vect);
 //Sobrecarga para printar um std::vector...
 std::ostream& operator<<(std::ostream& os, const std::vector<int32>& vect);
 
+void print_vector(const std::vector<int32>& vect,int32 n);
 
 
 /**
@@ -86,6 +91,62 @@ vect.push_back(random_int32(min_val, max_val));
 }
 }
 
+/**
+*Preenxe um vetor lendo os números de um arquivo.
+*Os números devem estar um por linha.
+**/
+bool fill_vector_from_file(const std::string& filename, std::vector<int32>& vect)
+{
+vect.resize(0);
+std::ifstream ifs(filename);
+if(!ifs.is_open())
+{
+std::cout<<"Erro ao ler o arquivo "<<filename<<". O arquivo provavelmente não existe."<<std::endl;
+return false;
+}
+while(!ifs.eof())
+{
+std::string line="";
+std::getline(ifs, line);
+if(line.size()==0)
+{
+continue;
+}
+vect.push_back(atoi(line.c_str()));
+}
+ifs.close();
+return true;
+}
+
+void print_vector(const std::vector<int32>& vect,int32 n)
+{
+std::cout<<"Mostrando os primeiros "<<n<<" elementos do vector..."<<std::endl;
+if(vect.size()==0)
+{
+std::cout<<"O vetor está vazio!!"<<std::endl;
+return;
+}
+int32 x=0;
+for(int32 i=0; i<n; i++)
+{
+if(i>=vect.size())
+{
+break;
+}
+std::cout<<vect[i];
+x++;
+if(x>=10)
+{
+x=0;
+std::cout<<std::endl;
+}
+else
+{
+std::cout<<"\t";
+}
+}
+std::cout<<std::endl;
+}
 
 std::ostream& operator<<(std::ostream& os, const std::vector<int32>& vect)
 {
